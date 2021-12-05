@@ -4,8 +4,6 @@ const router = express.Router()
 const Contact = require('../../model/index')
 const { contactValidator } = require('./validation')
 
-// const contacts = null
-
 router.get('/', async (req, res, next) => {
   try {
     const contact = await Contact.listContacts()
