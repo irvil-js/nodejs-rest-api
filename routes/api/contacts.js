@@ -4,135 +4,85 @@ const router = express.Router()
 const Contact = require('../../model/index')
 const { contactValidator } = require('./validation')
 
-router.get('/', async (req, res, next) => {
-  try {
-    const contact = await Contact.listContacts()
-    if (contact) {
-      return res.status(200).json({
-        status: 'success',
-        code: 200,
-        data: {
-          contact,
-        },
-      })
-    } else {
-      return res.status(200).json({
-        status: 'success',
-        code: 200,
-        data: 'Contact list is empty',
-      })
-    }
-  } catch (error) {
-    next(error)
-  }
-})
+function genSuccessResponse(res, responseData, code = 200, msg) {
+  return res.status(code).json({
+    status: 'success',
+    code: code,
+    data: responseData,
+    ...(msg && { message: msg })
+  })
+}
 
-router.get('/:contactId', async (req, res, next) => {
-  try {
-    const contact = await Contact.getContactById(req.params.contactId)
-    if (contact) {
-      return res.status(200).json({
-        status: 'success',
-        code: 200,
-        data: {
-          contact,
-        },
-      })
-    } else {
-      return res.status(404).json({
-        status: 'error',
-        code: 404,
-        data: 'User with this ID was not found!',
-      })
-    }
-  } catch (error) {
-    next(error)
-  }
-})
+function genErrorResponse(res, code, msg) {
+  return res.status(code).json({
+    status: 'error',
+    code: code,
+    message: msg,
+  })
+}
 
-router.post('/', contactValidator, async (req, res, next) => {
+function createHandlerFunc(func) {
+  return async (req, res, next) => {
+    try {
+      return func(req, res, next)
+    } catch (error) {
+      return next(error)
+    }
+  }
+}
+
+router.get('/', createHandlerFunc(async (req, res, next) => {
+  const contact = await Contact.listContacts()
+  const responseData = contact || 'Contact list is empty'
+  return genSuccessResponse(res, responseData)
+}))
+
+router.get('/:contactId', createHandlerFunc(async (req, res, next) => {
+  const contact = await Contact.getContactById(req.params.contactId)
+  if (!contact) {
+    return genErrorResponse(res, 404, 'User with this ID was not found!')
+  }
+  return genSuccessResponse(res, contact)
+}))
+
+router.post('/', contactValidator, createHandlerFunc(async (req, res, next) => {
   const { name, email, phone } = req.body
-
-  if (name && email && phone) {
-    const contact = await Contact.addContact(req.body)
-    if (contact) {
-      return res.status(201).json({
-        status: 'success',
-        code: 201,
-        data: { contact },
-      })
-    } else {
-      return res.status(400).json({
-        status: 'error',
-        code: 400,
-        data: 'A user with this name or email already exists!',
-      })
-    }
-  } else {
-    return res.status(400).json({
-      status: 'error',
-      code: 400,
-      message: 'Missing required name field',
-    })
+  if (!name || !email || !phone) {
+    return genErrorResponse(res, 400, 'Missing required name field')
   }
-})
 
-router.delete('/:contactId', async (req, res, next) => {
-  try {
-    const contact = await Contact.removeContact(req.params.contactId)
-
-    if (contact) {
-      return res.json({
-        status: 'success',
-        code: 200,
-        message: 'contact deleted',
-      })
-    } else {
-      return res.status(404).json({
-        status: 'error',
-        code: 404,
-        message: 'Not Found',
-      })
-    }
-  } catch (error) {
-    next(error)
+  const contact = await Contact.addContact(req.body)
+  if (!contact) {
+    return genErrorResponse(res, 400,
+      'A user with this name or email already exists!')
   }
-})
 
-router.put('/:contactId', contactValidator, async (req, res, next) => {
-  try {
-    if (req.body) {
-      const contact = await Contact.updateContact(
-        req.params.contactId,
-        req.body,
-      )
+  return genSuccessResponse(res, contact, 201)
+}))
 
-      if (contact) {
-        return res.status(200).json({
-          status: 'success',
-          code: 200,
-          message: 'Contact updated successfully',
-          data: {
-            contact,
-          },
-        })
-      } else {
-        return res.status(404).json({
-          status: 'error',
-          code: 404,
-          message: 'Not found',
-        })
-      }
-    } else {
-      return res.status(400).json({
-        status: 'error',
-        code: 400,
-        message: 'Missing fields',
-      })
-    }
-  } catch (error) {
-    next(error)
+router.delete('/:contactId', createHandlerFunc(async (req, res, next) => {
+  if (!await Contact.removeContact(req.params.contactId)) {
+    return genErrorResponse(res, 404, 'Not Found')
   }
-})
+
+  return genSuccessResponse(res, 'contact deleted')
+}))
+
+router.put('/:contactId', contactValidator, createHandlerFunc(async (req, res, next) => {
+  if (!req.body) {
+    return genErrorResponse(res, 400, 'Missing fields')
+  }
+
+  const contact = await Contact.updateContact(
+    req.params.contactId,
+    req.body,
+  )
+  if (!contact) {
+    return genErrorResponse(res, 404, 'Not Found')
+  }
+
+  return genSuccessResponse(res, contact, 200,
+    'Contact updated successfully')
+}))
 
 module.exports = router
