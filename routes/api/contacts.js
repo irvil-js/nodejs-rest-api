@@ -46,11 +46,6 @@ router.get('/:contactId', createHandlerFunc(async (req, res, next) => {
 }))
 
 router.post('/', contactValidator, createHandlerFunc(async (req, res, next) => {
-  const { name, email, phone } = req.body
-  if (!name || !email || !phone) {
-    return genErrorResponse(res, 400, 'Missing required name field')
-  }
-
   const contact = await Contact.addContact(req.body)
   if (!contact) {
     return genErrorResponse(res, 400,
@@ -61,7 +56,8 @@ router.post('/', contactValidator, createHandlerFunc(async (req, res, next) => {
 }))
 
 router.delete('/:contactId', createHandlerFunc(async (req, res, next) => {
-  if (!await Contact.removeContact(req.params.contactId)) {
+  const contact = await Contact.removeContact(req.params.contactId)
+  if (!contact) {
     return genErrorResponse(res, 404, 'Not Found')
   }
 
@@ -69,10 +65,6 @@ router.delete('/:contactId', createHandlerFunc(async (req, res, next) => {
 }))
 
 router.put('/:contactId', contactValidator, createHandlerFunc(async (req, res, next) => {
-  if (!req.body) {
-    return genErrorResponse(res, 400, 'Missing fields')
-  }
-
   const contact = await Contact.updateContact(
     req.params.contactId,
     req.body,
