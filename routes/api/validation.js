@@ -7,8 +7,9 @@ const schemaContactFormat = Joi.object({
     .required()
     .email({
       minDomainSegments: 2,
-      tlds: { allow: ['com', 'net'] },
+      tlds: { allow: ['com', 'net', 'uk'] },
     }),
+  favorite: Joi.boolean().default(false),
   phone: phoneVal
     .string()
     .required()
