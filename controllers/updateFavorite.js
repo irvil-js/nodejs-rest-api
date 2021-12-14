@@ -3,16 +3,16 @@ const { createHandlerFunc, genSuccessResponse, genErrorResponse } = require('../
 const { Contact } = require('../model/schemas/contact')
 
 const updateFavorite = createHandlerFunc(async (req, res, next) => {
+  if (!req.body.favorite) {
+    return genErrorResponse(res, HTTP_CODS.NOT_FOUND, 'Not Found')
+  }
+
   const contact = await Contact.findByIdAndUpdate(
     { _id: req.params.contactId },
     { ...req.body },
     { new: true },
   )
   if (!contact) {
-    return genErrorResponse(res, HTTP_CODS.NOT_FOUND, 'Not Found')
-  }
-
-  if (!req.body.favorite) {
     return genErrorResponse(res, HTTP_CODS.NOT_FOUND, 'Not Found')
   }
 
