@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+
 const {
   getAllContacts,
   getContactById,
@@ -7,7 +8,7 @@ const {
   removeContact,
   updateContact,
   updateFavorite,
-} = require('../../controllers/contacts')
+} = require('../../controllers/index')
 
 const { contactValidator } = require('./validation')
 

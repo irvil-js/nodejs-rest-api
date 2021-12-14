@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-const uriDb = process.env.DB_HOST || 'mongodb+srv://irvil:KvH4ZtPtR2QHigs8@cluster0.gogg2.mongodb.net/db-contacts?retryWrites=true&w=majority'
+require('dotenv').config()
+const uriDb = process.env.URI_DB
 
 const db = mongoose.connect(uriDb, {
   useNewUrlParser: true,
