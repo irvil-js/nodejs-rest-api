@@ -8,7 +8,7 @@ const {
   removeContact,
   updateContact,
   updateFavorite,
-} = require('../../controllers/index')
+} = require('../../controllers/contacts/index')
 
 const { contactValidator } = require('./validation')
 

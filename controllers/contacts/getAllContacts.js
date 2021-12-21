@@ -1,5 +1,5 @@
-const { createHandlerFunc, genSuccessResponse } = require('../helpers/utils')
-const { Contact } = require('../model/schemas/contact')
+const { createHandlerFunc, genSuccessResponse } = require('../../helpers/utils')
+const { Contact } = require('../../model/schemas/contact')
 
 const getAllContacts = createHandlerFunc(async (req, res, next) => {
   const contact = await Contact.find({})

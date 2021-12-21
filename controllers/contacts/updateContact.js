@@ -1,6 +1,6 @@
-const { HTTP_CODS } = require('../helpers/constants')
-const { createHandlerFunc, genSuccessResponse, genErrorResponse } = require('../helpers/utils')
-const { Contact } = require('../model/schemas/contact')
+const { HTTP_CODS } = require('../../helpers/constants')
+const { createHandlerFunc, genSuccessResponse, genErrorResponse } = require('../../helpers/utils')
+const { Contact } = require('../../model/schemas/contact')
 
 const updateContact = createHandlerFunc(async (req, res, next) => {
   const contact = await Contact.findByIdAndUpdate(
