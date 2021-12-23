@@ -5,7 +5,7 @@ const schemaValidateContact = Joi.object({
   name: Joi.string().alphanum().min(3).max(30),
   email: Joi.string().email(),
   phone: Joi.string().pattern(/\(\d{3}\)\s\d{3}-\d{4}/),
-  subscription: Joi.any().valid('free', 'pro', 'premium'),
+  subscription: Joi.any().valid('starter', 'pro', 'business'),
 })
 
 const schemaValidateAuth = Joi.object({
@@ -15,7 +15,7 @@ const schemaValidateAuth = Joi.object({
 
 const schemaValidateUpdateSub = Joi.object({
   email: Joi.string().email().required(),
-  subscription: Joi.any().valid('free', 'pro', 'premium').required(),
+  subscription: Joi.any().valid('starter', 'pro', 'business').required(),
 })
 
 const validate = (schema, obj, next) => {

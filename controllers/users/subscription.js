@@ -1,7 +1,7 @@
 const { HTTP_CODS } = require('../../helpers/constants')
 const { User } = require('../../model/schemas/user')
 require('dotenv').config()
-const adminEmail = process.env.ADMIN_ACCOUNT_EMAIL 
+const adminEmail = process.env.ADMIN_ACCOUNT_EMAIL
 
 const subscription = async (req, res, next) => {
   try {
