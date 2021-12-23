@@ -4,7 +4,7 @@ const { User } = require('../../model/schemas/user')
 
 const signup = async(req, res, next) => {
   try {
-    const user = await User.findOne( { "email" : req.body.email} )
+    const user = await User.findOne({ email: req.body.email })
 
     if (user) {
       return res.status(HTTP_CODS.CONFLICT).json({

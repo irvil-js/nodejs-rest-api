@@ -3,7 +3,7 @@ require('dotenv').config()
 const Subscription = {
   STARTER: 'starter',
   PRO: 'pro',
-  BUSINESS: 'buisness',
+  BUSINESS: 'business',
 }
 
 const HTTP_CODS = {

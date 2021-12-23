@@ -26,7 +26,7 @@ const contactSchema = new Schema(
     subscription: {
       type: String,
       default: 'starter',
-      enum: ['starter', 'pro', 'buisness'],
+      enum: ['starter', 'pro', 'business'],
     },
     owner: {
       type: SchemaTypes.ObjectId,

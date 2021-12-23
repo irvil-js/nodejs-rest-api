@@ -8,7 +8,7 @@ const login = async (req, res) => {
   const { email, password } = req.body
   const user = await User.findOne({ email })
   if (!user) {
-    return res.status(HTTP_CODS.BAD_REQUEST)
+    return res.status(HTTP_CODS.UNAUTHORIZED)
       .json({
         message: 'Wrong email or password'
       })
@@ -16,9 +16,9 @@ const login = async (req, res) => {
   const hashPassword = user.password
   const compareResult = bcrypt.compareSync(password, hashPassword)
   if (!compareResult) {
-    return res.status(HTTP_CODS.BAD_REQUEST)
+    return res.status(HTTP_CODS.UNAUTHORIZED)
       .json({
-        message: 'Wrong email or password'
+        message: 'Unauthorized'
       })
   }
 
@@ -26,9 +26,18 @@ const login = async (req, res) => {
     id: user._id
   }
   const token = jwt.sign(payload, SECRET_KEY)
-  await User.findById(user._id, { token })
+  await User.findByIdAndUpdate(
+    { _id: user._id },
+    { token: token },
+    { new: false },
+  )
+
   res.json({
-    token
+    token: token,
+    user: {
+      email: user.email,
+      subscription: user.subscription
+    }
   })
 }
 

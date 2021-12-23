@@ -1,9 +1,9 @@
-const HTTP_CODS = require('../../helpers/constants')
+const { HTTP_CODS } = require('../../helpers/constants')
 const { User } = require('../../model/schemas/user')
 
 const current = async (req, res, next) => {
   try {
-    const id = req.user.id
+    const id = req.user._id
     const user = await User.findById(id)
     const { email, subscription } = user
 

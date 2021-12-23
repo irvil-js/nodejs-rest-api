@@ -1,7 +1,7 @@
 const passport = require('passport')
 const { Strategy, ExtractJwt } = require('passport-jwt')
-const { SECRET_KEY } = require('../helpers/constans')
-const User = require('../model/user')
+const { SECRET_KEY } = require('../../helpers/constants')
+const { User } = require('../../model/schemas/user')
 
 const opts = {
   secretOrKey: SECRET_KEY,
