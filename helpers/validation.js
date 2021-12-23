@@ -14,6 +14,7 @@ const schemaValidateAuth = Joi.object({
 })
 
 const schemaValidateUpdateSub = Joi.object({
+  email: Joi.string().email().required(),
   subscription: Joi.any().valid('free', 'pro', 'premium').required(),
 })
 
@@ -23,7 +24,7 @@ const validate = (schema, obj, next) => {
     const [{ message }] = error.details
     return next({
       status: HTTP_CODS.BAD_REQUEST,
-      message: `Filed: ${message.replace(/"/g, '')}`,
+      message: `Failed: ${message.replace(/"/g, '')}`,
     })
   }
   next()

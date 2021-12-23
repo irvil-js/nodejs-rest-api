@@ -13,9 +13,9 @@ const {
 
 router
   .post('/login', validateAuth, login)
-  .post('/', validateAuth, signup)
-  .post('/', guard, logout)
-  .patch('', guard, validateUpdateSub, subscription)
+  .post('/signup', validateAuth, signup)
+  .patch('/', guard, validateUpdateSub, subscription)
   .get('/current', guard, current)
+  .get('/logout', guard, logout)
 
 module.exports = router
