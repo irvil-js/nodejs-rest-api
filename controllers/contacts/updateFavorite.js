@@ -7,8 +7,8 @@ const updateFavorite = createHandlerFunc(async (req, res, next) => {
     return genErrorResponse(res, HTTP_CODS.NOT_FOUND, 'Not Found')
   }
 
-  const contact = await Contact.findByIdAndUpdate(
-    { _id: req.params.contactId },
+  const contact = await Contact.findOneAndUpdate(
+    { _id: req.params.contactId, owner: req.user._id },
     { ...req.body },
     { new: true },
   )

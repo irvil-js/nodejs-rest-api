@@ -3,8 +3,8 @@ const { createHandlerFunc, genSuccessResponse, genErrorResponse } = require('../
 const { Contact } = require('../../model/schemas/contact')
 
 const updateContact = createHandlerFunc(async (req, res, next) => {
-  const contact = await Contact.findByIdAndUpdate(
-    { _id: req.params.contactId },
+  const contact = await Contact.findOneAndUpdate(
+    { _id: req.params.contactId, owner: req.user._id },
     { ...req.body },
     { new: true },
   )

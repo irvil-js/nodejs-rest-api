@@ -3,7 +3,7 @@ const { createHandlerFunc, genSuccessResponse, genErrorResponse } = require('../
 const { Contact } = require('../../model/schemas/contact')
 
 const removeContact = createHandlerFunc(async (req, res, next) => {
-  const contact = await Contact.findByIdAndRemove({ _id: req.params.contactId })
+  const contact = await Contact.findOneAndRemove({ _id: req.params.contactId, owner: req.user._id })
   if (!contact) {
     return genErrorResponse(res, HTTP_CODS.NOT_FOUND, 'Not Found')
   }

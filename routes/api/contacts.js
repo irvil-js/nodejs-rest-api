@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const guard = require('../config/guard')
 
 const {
   getAllContacts,
@@ -10,14 +11,14 @@ const {
   updateFavorite,
 } = require('../../controllers/contacts/index')
 
-const { contactValidator } = require('./validation')
+const { contactValidator } = require('../../helpers/validation')
 
 router
-  .get('/:contactId', getContactById)
-  .delete('/:contactId', removeContact)
-  .put('/:contactId', contactValidator, updateContact)
-  .patch('/:contactId/favorite', updateFavorite)
-  .get('/', getAllContacts)
+  .get('/:contactId', guard, getContactById)
+  .delete('/:contactId', guard, removeContact)
+  .put('/:contactId', contactValidator, guard, updateContact)
+  .patch('/:contactId/favorite', guard, updateFavorite)
+  .get('/', guard, getAllContacts)
   .post('/', contactValidator, addContact)
 
 module.exports = router

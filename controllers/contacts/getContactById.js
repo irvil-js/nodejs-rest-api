@@ -3,7 +3,7 @@ const { createHandlerFunc, genSuccessResponse, genErrorResponse } = require('../
 const { Contact } = require('../../model/schemas/contact')
 
 const getContactById = createHandlerFunc(async (req, res, next) => {
-  const contact = await Contact.findOne({ _id: req.params.contactId })
+  const contact = await Contact.findOne({ _id: req.params.contactId, owner: req.user._id })
   if (!contact) {
     return genErrorResponse(res, HTTP_CODS.NOT_FOUND, 'User with this ID was not found!')
   }
