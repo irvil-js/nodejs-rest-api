@@ -23,7 +23,7 @@ const subscription = async (req, res, next) => {
 
     await User.findByIdAndUpdate(
       { _id: user._id },
-      { subscription: subscription },
+      { subscription },
       { new: false },
     )
     return res.status(HTTP_CODS.OK).json({
@@ -32,7 +32,7 @@ const subscription = async (req, res, next) => {
       data: {
         user: {
           email: email,
-          subscription: subscription,
+          subscription,
         },
       },
     })
