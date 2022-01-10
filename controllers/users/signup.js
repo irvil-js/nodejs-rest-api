@@ -1,9 +1,11 @@
 const { HTTP_CODS } = require('../../helpers/constants')
-
 const { User } = require('../../model/schemas/user')
+const gravatar = require('gravatar')
 
-const signup = async(req, res, next) => {
+const signup = async (req, res, next) => {
   try {
+    const avatarURL = gravatar.url({ email: req.body.email }, { s: 250 }, true)
+
     let user = await User.findOne({ email: req.body.email })
 
     if (user) {
@@ -14,8 +16,7 @@ const signup = async(req, res, next) => {
       })
     }
 
-    user = await User.create(req.body)
-
+    user = await User.create({ email: req.body.email, password: req.body.password, avatarURL: `${avatarURL}` })
     return res.status(HTTP_CODS.CREATED).json({
       status: 'success',
       code: HTTP_CODS.CREATED,
