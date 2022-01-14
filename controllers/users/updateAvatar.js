@@ -21,7 +21,8 @@ const updateAvatar = async (req, res) => {
     }
   }
   uploadPath = path.join(uploadPath, originalname)
-  const avatar = `/avatars/${id}/${originalname}`
+  const baseUrl = req.baseUrl
+  const avatar = `${baseUrl}/avatars/${id}/${originalname}`
   try {
     const file = await Jimp.read(tempPath)
     await file.resize(255, 255).write(tempPath)
